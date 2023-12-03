@@ -1,11 +1,15 @@
-FROM gradle:8.1.1-jdk17
+FROM gradle:8.1.1-jdk17 as builder
 
-WORKDIR /
+WORKDIR /app
 
 COPY . .
 
-RUN gradle installDist
+RUN gradle bootJar
 
-RUN chmod +x ./build/install/demo/bin/demo
+FROM openjdk:17-jdk
 
-CMD ./build/install/demo/bin/demo
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/*.jar app.jar
+
+CMD ["java", "-jar", "app.jar"]
