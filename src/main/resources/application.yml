@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: app
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    database: ${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+
