@@ -5,6 +5,6 @@
     "node": "^21.2.0"
   },
   "scripts": {
-    "build-frontend": "command to build the frontend"
+    "build-frontend": "react-scripts build"
   }
 }
