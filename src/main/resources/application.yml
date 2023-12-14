@@ -50,9 +50,6 @@ spring:
     active: dev
   application:
     name: app
-sentry:
-  dsn: https://27777b20dda1439f5cfac2a5f33d72ee@o4506389897347072.ingest.sentry.io/4506389899247616
-  traces-sample-rate: 1.0
 
 rsa:
   private-key: classpath:certs/private.pem

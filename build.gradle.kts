@@ -5,7 +5,6 @@ plugins {
 	id("org.springframework.boot") version "3.2.0"
 	id("io.spring.dependency-management") version "1.1.4"
 	id("io.freefair.lombok") version "8.4"
-	id("io.sentry.jvm.gradle") version "3.14.0"
 }
 
 group = "hexlet.code"
@@ -43,7 +42,6 @@ dependencies {
 	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
 	testImplementation ("com.h2database:h2")
 
-	implementation ("io.sentry:sentry-spring-boot-starter-jakarta:7.0.0")
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
