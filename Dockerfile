@@ -10,7 +10,7 @@ FROM openjdk:17-jdk
 
 WORKDIR /app
 
-ENV ENV=PROD
+ENV SPRING_PROFILES_ACTIVE=prod
 
 COPY --from=builder /app/build/libs/*.jar app.jar
 
