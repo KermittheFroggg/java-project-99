@@ -2,7 +2,7 @@ spring:
   application:
     name: app
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    url: ${DATABASE_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
@@ -15,5 +15,3 @@ spring:
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
-
-#
