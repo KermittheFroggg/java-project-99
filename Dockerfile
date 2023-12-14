@@ -22,7 +22,7 @@ FROM node:14 as frontend
 WORKDIR /
 COPY . .
 RUN npm install
-RUN npx build-frontend
+RUN npm run build-frontend
 
 # Build the backend
 FROM gradle:8.1.1-jdk17 as builder
