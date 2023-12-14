@@ -16,29 +16,68 @@
 #
 #CMD ["java", "-jar", "app.jar"]
 
-# Build the frontend
+## Build the frontend
+#FROM eclipse-temurin:20-jdk
+#
+#ARG GRADLE_VERSION=8.4
+#
+#RUN apt-get update && apt-get install -yq unzip
+#
+#RUN wget -q https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+#    && unzip gradle-${GRADLE_VERSION}-bin.zip \
+#    && rm gradle-${GRADLE_VERSION}-bin.zip
+#
+#ENV GRADLE_HOME=/opt/gradle
+#
+#RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
+#
+#ENV PATH=$PATH:$GRADLE_HOME/bin
+#
+#WORKDIR .
+#
+#COPY . .
+#
+#RUN gradle bootJar
+#
+#ENV PORT=$PORT
+#
+#ENTRYPOINT ["java","-jar","/build/libs/app-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
+
+#FROM node:20.6.1 AS frontend
+#
+#WORKDIR /
+#
+#COPY package*.json .
+#
+#RUN npm ci
+#
+#COPY /frontend .
+#
+#RUN npm run build
+
 FROM eclipse-temurin:20-jdk
 
-ARG GRADLE_VERSION=8.4
+ARG GRADLE_VERSION=8.3
 
-RUN apt-get update && apt-get install -yq unzip
+RUN apt-get update && apt-get install -yq make unzip
 
-RUN wget -q https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    && unzip gradle-${GRADLE_VERSION}-bin.zip \
-    && rm gradle-${GRADLE_VERSION}-bin.zip
+WORKDIR /backend
 
-ENV GRADLE_HOME=/opt/gradle
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+COPY gradlew .
 
-RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
+RUN ./gradlew --no-daemon dependencies
 
-ENV PATH=$PATH:$GRADLE_HOME/bin
+COPY lombok.config .
+COPY src src
 
-WORKDIR .
+COPY --from=frontend /frontend/dist /src/main/resources/static
 
-COPY . .
+RUN ./gradlew --no-daemon build
 
-RUN gradle bootJar
+ENV JAVA_OPTS "-Xmx512M -Xms512M"
+EXPOSE 8080
 
-ENV PORT=$PORT
-
-ENTRYPOINT ["java","-jar","/build/libs/app-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
+CMD java -jar build/libs/HexletSpringBlog-1.0-SNAPSHOT.jar
