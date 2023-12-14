@@ -6,11 +6,11 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  server:
-    ssl:
-      enabled: false
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#  server:
+#    ssl:
+#      enabled: false
 
 
 rsa:
