@@ -1,15 +1,12 @@
 package hexlet.code.repository;
 
+import hexlet.code.model.Label;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import hexlet.code.model.User;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
-
-
+public interface LabelRepository extends JpaRepository<Label, Long> {
+    Optional<Label> findByName(String name);
 }

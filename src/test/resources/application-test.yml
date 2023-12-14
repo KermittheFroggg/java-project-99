@@ -1,6 +1,4 @@
 #spring:
-#  profiles:
-#    active: dev
 #  application:
 #    name: app
 #  datasource:
@@ -12,8 +10,6 @@
 #  server:
 #    ssl:
 #      enabled: false
-#
-#
 #rsa:
 #  private-key: classpath:certs/private.pem
 #  public-key: classpath:certs/public.pem
@@ -35,9 +31,6 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
   output:
     ansi:
       enabled: always
@@ -46,13 +39,7 @@ spring:
   server:
     ssl:
       enabled: false
-  profiles:
-    active: dev
-  application:
-    name: app
-sentry:
-  dsn: https://27777b20dda1439f5cfac2a5f33d72ee@o4506389897347072.ingest.sentry.io/4506389899247616
-  traces-sample-rate: 1.0
+
 
 rsa:
   private-key: classpath:certs/private.pem
