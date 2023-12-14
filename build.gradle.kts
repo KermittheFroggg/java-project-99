@@ -49,9 +49,7 @@ dependencies {
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
 	systemProperty("spring.profiles.active", "dev")
 }
-tasks.named<org.springframework.boot.gradle.tasks.build.BootBuild>("build") {
-	systemProperty("spring.profiles.active", "prod")
-}
+
 tasks.test {
 	testLogging {
 		events("passed", "skipped", "failed")
