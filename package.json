@@ -3,5 +3,8 @@
   "dependencies": {
     "@hexlet/java-task-manager-frontend": "^1.0.21",
     "node": "^21.2.0"
+  },
+  "scripts": {
+    "build-frontend": "command to build the frontend"
   }
 }
