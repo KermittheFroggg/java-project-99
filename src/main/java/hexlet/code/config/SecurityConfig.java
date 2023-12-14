@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern("/")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/welcome")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/api/login")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/login")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/v3/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/***")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern(POST, "/api/users")).permitAll()
