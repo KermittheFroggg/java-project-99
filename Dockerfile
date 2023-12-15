@@ -36,6 +36,6 @@ WORKDIR ./
 
 COPY ./ .
 
-RUN gradle stage
+RUN gradle build
 
-CMD ./build/install/app/bin/app
+CMD ./build/libs/*.jar
