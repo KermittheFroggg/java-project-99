@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @EnableConfigurationProperties
-@RestController
 @SpringBootApplication
-@EnableJpaAuditing
 @EnableMethodSecurity
 public class AppApplication {
 

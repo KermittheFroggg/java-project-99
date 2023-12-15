@@ -56,7 +56,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
-                .formLogin(withDefaults())
                 .httpBasic(withDefaults())
                 .build();
     }
