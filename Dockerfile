@@ -38,4 +38,6 @@ COPY ./ .
 
 RUN gradle build
 
-CMD ./build/libs/*.jar
+RUN chmod +x ./build/libs/*.jar
+
+CMD ["java", "-jar", "./build/libs/app-0.0.1-SNAPSHOT-plain.jar"]
