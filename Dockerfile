@@ -16,28 +16,26 @@
 #
 #CMD ["java", "-jar", "app.jar"]
 #
+FROM eclipse-temurin:20-jdk
 
-# Build the frontend
-# Build the frontend
-# Build the frontend
-FROM node:14 as frontend
-WORKDIR /app
-COPY . .
-RUN npm install --include=dev
-RUN npm run build-frontend
+ARG GRADLE_VERSION=8.4
 
-# Build the backend
-FROM gradle:8.1.1-jdk17 as builder
-WORKDIR /app
-COPY . .
-# Copy the built frontend files
-COPY --from=frontend /app/build /app/build
-RUN gradle bootJar
+RUN apt-get update && apt-get install -yq unzip
 
-# Final image
-FROM openjdk:17-jdk
-WORKDIR /app
-ENV SPRING_PROFILES_ACTIVE=prod
-COPY --from=builder /app/build/libs/*.jar app.jar
-COPY --from=builder /app/build /app/build
-CMD ["java", "-jar", "app.jar"]
+RUN wget -q https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip gradle-${GRADLE_VERSION}-bin.zip \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
+
+ENV GRADLE_HOME=/opt/gradle
+
+RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
+
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+WORKDIR ./
+
+COPY ./ .
+
+RUN gradle stage
+
+CMD ./build/install/app/bin/app
