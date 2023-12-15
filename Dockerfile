@@ -51,7 +51,6 @@ WORKDIR ./
 
 COPY ./ .
 
-RUN gradle stage
+RUN gradle build
 ENV SPRING_PROFILES_ACTIVE=prod
-
-CMD ./build/install/app/bin/app
+CMD ["java", "-jar", "./build/libs/*.jar"]
