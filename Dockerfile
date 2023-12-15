@@ -23,7 +23,7 @@
 #
 #WORKDIR /app
 #
-#ENV SPRING_PROFILES_ACTIVE=dev
+#ENV SPRING_PROFILES_ACTIVE=production
 #
 #COPY --from=builder /app/build/libs/*.jar app.jar
 #
