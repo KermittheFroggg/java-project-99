@@ -1,17 +1,29 @@
+#spring:
+#  application:
+#    name: app
+#  datasource:
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: create-drop
+#  server:
+#    ssl:
+#      enabled: false
+#
+#
+#rsa:
+#  private-key: classpath:certs/private.pem
+#  public-key: classpath:certs/public.pem
+
 spring:
-  application:
-    name: app
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-  server:
-    ssl:
-      enabled: false
-
-
-rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem
+    url: "jdbc:h2:mem:spring"
+    username: pip
+    password: dip
+  h2:
+    console:
+      enabled: true
+      path: /h2console/
+    settings:
+      web-allow-others: false

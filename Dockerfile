@@ -33,9 +33,9 @@
 
 FROM gradle:8.4-jdk20
 
-WORKDIR /
+WORKDIR ./
 
-COPY . .
+COPY ./ .
 
 RUN gradle installDist
 
