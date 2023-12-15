@@ -8,9 +8,9 @@ spring:
     driver-class-name: org.postgresql.Driver
 #  jpa:
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#  server:
-#    ssl:
-#      enabled: false
+  server:
+    ssl:
+      enabled: false
 server:
   address: 0.0.0.0
   port: ${PORT:8080}
