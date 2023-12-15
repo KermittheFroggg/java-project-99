@@ -1,43 +1,18 @@
-#FROM gradle:8.1.1-jdk17 as builder
-#
-#WORKDIR /app
-#
-#COPY . .
-#
-#RUN gradle bootJar
-#
-#FROM openjdk:17-jdk
-#
-#WORKDIR /app
-#
-#ENV SPRING_PROFILES_ACTIVE=prod
-#
-#COPY --from=builder /app/build/libs/*.jar app.jar
-#
-#CMD ["java", "-jar", "app.jar"]
-#
-FROM eclipse-temurin:20-jdk
+FROM gradle:8.1.1-jdk17 as builder
 
-ARG GRADLE_VERSION=8.4
+WORKDIR /app
 
-RUN apt-get update && apt-get install -yq unzip
+COPY . .
 
-RUN wget -q https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
-    && unzip gradle-${GRADLE_VERSION}-bin.zip \
-    && rm gradle-${GRADLE_VERSION}-bin.zip
+RUN gradle bootJar
 
-ENV GRADLE_HOME=/opt/gradle
+FROM openjdk:17-jdk
 
-RUN mv gradle-${GRADLE_VERSION} ${GRADLE_HOME}
+WORKDIR /app
 
-ENV PATH=$PATH:$GRADLE_HOME/bin
+ENV SPRING_PROFILES_ACTIVE=prod
 
-WORKDIR ./
+COPY --from=builder /app/build/libs/*.jar app.jar
 
-COPY ./ .
+CMD ["java", "-jar", "app.jar"]
 
-RUN gradle build
-
-RUN chmod +x ./build/libs/*.jar
-
-CMD ["java", "-jar", "./build/libs/app-0.0.1-SNAPSHOT-plain.jar"]
