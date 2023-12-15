@@ -1,13 +1,5 @@
 {
-  "name": "please-work",
   "dependencies": {
-    "@hexlet/java-task-manager-frontend": "^1.0.21",
-    "node": "^21.2.0"
-  },
-  "devDependencies": {
-    "react-scripts": "^4.0.3"
-  },
-  "scripts": {
-    "build-frontend": "react-scripts build"
+    "@hexlet/java-task-manager-frontend": "^1.0.20"
   }
 }
