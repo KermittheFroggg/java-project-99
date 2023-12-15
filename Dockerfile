@@ -18,24 +18,22 @@
 #
 
 # Build the frontend
+# Build the frontend
 FROM node:14 as frontend
-WORKDIR /
 COPY . .
-RUN npm install
+RUN npm install --include=dev
 RUN npm run build-frontend
 
 # Build the backend
 FROM gradle:8.1.1-jdk17 as builder
-WORKDIR /
 COPY . .
 # Copy the built frontend files
-COPY --from=frontend /src/main/resources/static /src/main/resources/static
+COPY --from=frontend ./build ./build
 RUN gradle bootJar
 
 # Final image
 FROM openjdk:17-jdk
-WORKDIR /
 ENV SPRING_PROFILES_ACTIVE=prod
-COPY --from=builder /app/build/libs/*.jar app.jar
-COPY --from=builder /src/main/resources/static /src/main/resources/static
+COPY --from=builder ./build/libs/*.jar app.jar
+COPY --from=builder ./build ./build
 CMD ["java", "-jar", "app.jar"]
