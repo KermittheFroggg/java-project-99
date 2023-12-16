@@ -37,6 +37,10 @@ WORKDIR ./
 
 COPY ./ .
 
+RUN npm i @hexlet/java-task-manager-frontend
+
+RUN npx build-frontend
+
 RUN gradle installDist
 
 CMD ./build/install/app/bin/app --spring.profiles.active=production
