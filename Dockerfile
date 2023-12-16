@@ -1,15 +1,15 @@
-#FROM node:20.6.1 AS frontend
-#
-#WORKDIR /frontend
-#
-#COPY /package*.json .
-#
-#RUN npm ci
-#
-#COPY . .
-#
-#RUN npm run build
-#
+FROM node:20.6.1 AS frontend
+
+WORKDIR /frontend
+
+COPY /package*.json .
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
 #
 #FROM gradle:8.1.1-jdk17 as builder
 #
@@ -36,15 +36,6 @@ FROM gradle:8.4-jdk20
 WORKDIR ./
 
 COPY ./ .
-
-
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y nodejs \
-    npm  \
-
-RUN npm i @hexlet/java-task-manager-frontend
-
-RUN npx build-frontend
 
 RUN gradle installDist
 
