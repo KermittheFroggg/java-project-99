@@ -1,14 +1,14 @@
-FROM node:20.6.1 AS frontend
-
-WORKDIR /frontend
-
-COPY /package*.json .
-
-RUN npm ci
-
-COPY . .
-
-RUN npm run build
+#FROM node:20.6.1 AS frontend
+#
+#WORKDIR /frontend
+#
+#COPY /package*.json .
+#
+#RUN npm ci
+#
+#COPY . .
+#
+#RUN npm run build
 
 #
 #FROM gradle:8.1.1-jdk17 as builder
