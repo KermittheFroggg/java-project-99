@@ -1,8 +1,12 @@
 package hexlet.code.component;
 
 
+import hexlet.code.model.Label;
+import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
+import hexlet.code.repository.LabelRepository;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import lombok.AllArgsConstructor;
@@ -23,6 +27,12 @@ public class DataInitializer implements ApplicationRunner {
     private final TaskStatusRepository taskStatusRepository;
 
     @Autowired
+    private final LabelRepository labelRepository;
+
+    @Autowired
+    private final TaskRepository taskRepository;
+
+    @Autowired
     private PasswordEncoder encoder;
 
     @Override
@@ -34,18 +44,36 @@ public class DataInitializer implements ApplicationRunner {
         userData.setEmail(email);
         userData.setPasswordDigest(encodedPassword);
         userRepository.save(userData);
-        generatedTaskStatus("Draft", "draft");
-        generatedTaskStatus("ToReview", "to_review");
-        generatedTaskStatus("ToBeFixed", "to_be_fixed");
-        generatedTaskStatus("ToPublish", "to_publish");
-        generatedTaskStatus("Published", "published");
+        generateTaskStatus("Draft", "draft");
+        generateTaskStatus("ToReview", "to_review");
+        generateTaskStatus("ToBeFixed", "to_be_fixed");
+        generateTaskStatus("ToPublish", "to_publish");
+        generateTaskStatus("Published", "published");
 
+        generateLabel("bug");
+        generateLabel("feature");
+
+        generateTask("Task_1", taskStatusRepository.findBySlug("draft").get());
+        generateTask("Task_2", taskStatusRepository.findBySlug("to_review").get());
     }
 
-    private void generatedTaskStatus(String name, String slug) {
+    private void generateTaskStatus(String name, String slug) {
         var taskStatus = new TaskStatus();
         taskStatus.setName(name);
         taskStatus.setSlug(slug);
         taskStatusRepository.save(taskStatus);
+    }
+
+    private void generateLabel(String name) {
+        var label = new Label();
+        label.setName(name);
+        labelRepository.save(label);
+    }
+
+    private void generateTask(String name, TaskStatus taskStatus) {
+        var task = new Task();
+        task.setName(name);
+        task.setTaskStatus(taskStatus);
+        taskRepository.save(task);
     }
 }

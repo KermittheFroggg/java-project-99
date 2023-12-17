@@ -1,8 +1,12 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.internal.classpath.Instrumented.systemProperty
 
 plugins {
 	java
 	application
+	checkstyle
+	jacoco
 	id("org.springframework.boot") version "3.2.0"
 	id("io.spring.dependency-management") version "1.1.4"
 	id("io.freefair.lombok") version "8.4"
@@ -64,5 +68,11 @@ tasks.withType<Test> {
 buildscript {
 	repositories {
 		mavenCentral()
+	}
+}
+
+tasks.named<JacocoReport>("jacocoTestReport") {
+	reports {
+		xml.required.set(true)
 	}
 }

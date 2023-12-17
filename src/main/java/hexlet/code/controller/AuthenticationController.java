@@ -39,4 +39,5 @@ public final class AuthenticationController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-    }}
+    }
+}

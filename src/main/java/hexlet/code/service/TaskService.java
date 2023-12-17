@@ -59,7 +59,8 @@ public class TaskService {
                 .filter(task -> titleCont == null || task.getName().contains(titleCont))
                 .filter(task -> assigneeId == null || task.getAssignee().getId() == (assigneeId))
                 .filter(task -> status == null || task.getTaskStatus().getSlug().equals(status))
-                .filter(task -> labelId == null || task.getLabels().stream().anyMatch(label -> label.getId().equals(labelId)))
+                .filter(task -> labelId == null || task.getLabels().stream().
+                        anyMatch(label -> label.getId().equals(labelId)))
                 .map(taskMapper::map)
                 .toList();
     }

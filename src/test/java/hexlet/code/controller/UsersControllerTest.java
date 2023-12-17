@@ -153,7 +153,7 @@ class UsersControllerTest {
     @Test
     public void testAuthenticate() {
         UserDetailsService userDetailsService = mock(UserDetailsService.class);
-        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+        PasswordEncoder mockPasswordEncoder = mock(PasswordEncoder.class);
         AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
 
         String username = "testUser";
@@ -166,11 +166,12 @@ class UsersControllerTest {
                 .build();
 
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
-        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
+        when(mockPasswordEncoder.encode(password)).thenReturn(encodedPassword);
         when(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password)))
                 .thenReturn(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Authentication authentication = authenticationManager.
+                authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         assertEquals(username, authentication.getName());
     }

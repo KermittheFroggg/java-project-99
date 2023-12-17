@@ -1,6 +1,11 @@
 package hexlet.code.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,14 +37,4 @@ public class TaskStatus {
 
     @CreatedDate
     private LocalDate createdAt;
-
-    @Override
-    public String toString() {
-        return "\n TaskStatus{" +
-                "id= " + id +
-                ", name= " + name +
-                ", slug= " +  slug +
-                ", createdAt= " + createdAt +
-                '}';
-    }
 }
