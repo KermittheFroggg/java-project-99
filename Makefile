@@ -1,8 +1,4 @@
-setup:
-	./gradlew wrapper --gradle-version 8.4
-
-frontend:
-	make -C frontend start
+.DEFAULT_GOAL := build-run
 
 clean:
 	./gradlew clean
@@ -10,20 +6,14 @@ clean:
 build:
 	./gradlew clean build
 
-start:
-	./gradlew bootRun --args='--spring.profiles.active=dev'
-
-start-prod:
-	./gradlew bootRun --args='--spring.profiles.active=production'
-
 install:
-	./gradlew installDist
+	./gradlew clean install
 
-start-dist:
-	./build/install/app/bin/app
+run-dist:
+	./build/install/java-package/bin/java-package
 
-lint:
-	./gradlew checkstyleMain checkstyleTest
+run:
+	./gradlew run
 
 test:
 	./gradlew test
@@ -31,13 +21,13 @@ test:
 report:
 	./gradlew jacocoTestReport
 
-check-updates:
-	./gradlew dependencyUpdates
+lint:
+	./gradlew checkstyleMain checkstyleTest
 
-generate-migrations:
-	./gradlew diffChangeLog
+update-deps:
+	./gradlew useLatestVersions
 
-db-migrate:
-	./gradlew update
 
-.PHONY: build frontend
+build-run: build run
+
+.PHONY: build
