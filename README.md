@@ -12,3 +12,6 @@
 https://java-project-99-production.up.railway.app
 
 https://springapp-7lvb.onrender.com
+
+login: hexlet@example.com
+password: qwerty
