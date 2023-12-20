@@ -36,5 +36,12 @@ public class ModelGenerator {
                 .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
                 .supply(Select.field(User::getPasswordDigest), () -> faker.internet().password(8, 20))
                 .toModel();
+
+        labelModel = Instancio.of(Label.class)
+                .ignore(Select.field(Label::getId))
+                .supply(Select.field(Label::getName), () -> faker.lorem().word())
+                .toModel();
     }
+
+
 }

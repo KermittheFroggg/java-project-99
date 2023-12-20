@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/labels")
@@ -44,15 +45,24 @@ public final class LabelController {
 
     @GetMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public LabelDTO getLabel(@PathVariable long id) {
-        return labelService.findById(id);
+    public ResponseEntity<LabelDTO> getLabel(@PathVariable long id) {
+        try {
+            LabelDTO label = labelService.findById(id);
+            return ResponseEntity.ok(label);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public LabelDTO updateLabel(@PathVariable long id,
-                                @RequestBody @Valid LabelUpdateDTO labelData) {
-        return labelService.update(labelData, id);
+    public ResponseEntity<LabelDTO> updateLabel(@PathVariable long id,
+                                                @RequestBody @Valid LabelUpdateDTO labelData) {
+        try {
+            return ResponseEntity.ok(labelService.update(labelData, id));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping(path = "/{id}")
