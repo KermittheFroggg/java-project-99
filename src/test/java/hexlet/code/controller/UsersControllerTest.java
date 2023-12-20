@@ -133,10 +133,8 @@ class UsersControllerTest {
         when(userDetails.getUsername()).thenReturn("testUser");
         when(userDetails.getPassword()).thenReturn("testPassword");
 
-        // Act
         UserDetails returnedUserDetails = userDetailsService.loadUserByUsername("testUser");
 
-        // Assert
         assertEquals("testUser", returnedUserDetails.getUsername());
         assertEquals("testPassword", returnedUserDetails.getPassword());
     }
