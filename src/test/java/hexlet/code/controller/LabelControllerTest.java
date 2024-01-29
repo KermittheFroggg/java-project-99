@@ -10,6 +10,7 @@ import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class LabelControllerTest {
 
@@ -61,15 +63,6 @@ public class LabelControllerTest {
     public void setUp() {
         testLabel = Instancio.of(modelGenerator.getLabelModel())
                 .create();
-        labelRepository.save(testLabel);
-
-        List<Task> tasks = taskRepository.findAll();
-        for (Task task : tasks) {
-            task.getLabels().remove(testLabel);
-            taskRepository.save(task);
-        }
-
-        token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
     }
 
     @AfterEach
