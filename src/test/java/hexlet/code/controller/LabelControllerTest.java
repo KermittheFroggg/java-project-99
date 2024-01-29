@@ -2,7 +2,9 @@ package hexlet.code.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.model.Label;
+import hexlet.code.model.Task;
 import hexlet.code.repository.LabelRepository;
+import hexlet.code.repository.TaskRepository;
 import hexlet.code.util.ModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -46,6 +49,9 @@ public class LabelControllerTest {
     @Autowired
     private ModelGenerator modelGenerator;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
     private Label testLabel;
 
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
@@ -55,6 +61,12 @@ public class LabelControllerTest {
         testLabel = Instancio.of(modelGenerator.getLabelModel())
                 .create();
         labelRepository.save(testLabel);
+
+        List<Task> tasks = taskRepository.findAll();
+        for (Task task : tasks) {
+            task.getLabels().remove(testLabel);
+            taskRepository.save(task);
+        }
 
         token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
     }
