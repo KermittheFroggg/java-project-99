@@ -29,12 +29,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Optional;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -58,6 +64,7 @@ class UsersControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     private User testUser;
 
@@ -174,5 +181,45 @@ class UsersControllerTest {
         assertEquals(username, authentication.getName());
     }
 
+    @Test
+    public void testUpdate() throws Exception {
+        User user = userRepository.save(testUser);
+        user.setFirstName("newFirstName");
+        user.setLastName("newLastName");
+        user.setEmail("newEmail" + System.currentTimeMillis() + "@example.com");
+        user.setPasswordDigest("newPassword");
+
+        var request = put("/api/users/{id}", user.getId())
+                .with(jwt())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(user));
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var updatedUser = userRepository.findById(user.getId()).get();
+
+        assertThat(updatedUser).isNotNull();
+        assertThat(updatedUser.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(updatedUser.getLastName()).isEqualTo(user.getLastName());
+        assertThat(updatedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(updatedUser.getPasswordDigest()).isNotEqualTo("newPassword");
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        User user = new User();
+        user.setEmail("testEmail" + System.currentTimeMillis() + "@example.com");
+        user.setFirstName("Test");
+        user.setLastName("User");
+        user.setPasswordDigest("TestPassword");
+
+        user = userRepository.save(user);
+
+        mockMvc.perform(delete("/api/users/" + user.getId()).with(jwt()))
+                .andExpect(status().isNoContent());
+
+        Optional<User> destroyedUser = userRepository.findById(user.getId());
+        assertThat(destroyedUser.isPresent()).isFalse();
+    }
 }
 

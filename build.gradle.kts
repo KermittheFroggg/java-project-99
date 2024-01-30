@@ -76,3 +76,8 @@ tasks.named<JacocoReport>("jacocoTestReport") {
 		xml.required.set(true)
 	}
 }
+
+tasks.withType<JavaCompile> {
+	sourceCompatibility = JavaVersion.VERSION_17.toString()
+	targetCompatibility = JavaVersion.VERSION_17.toString()
+}

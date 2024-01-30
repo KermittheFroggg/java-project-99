@@ -4,6 +4,7 @@ import hexlet.code.dto.user.UserCreateDTO;
 import hexlet.code.dto.user.UserDTO;
 import hexlet.code.dto.user.UserUpdateDTO;
 
+import hexlet.code.exception.UserNotFoundException;
 import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
@@ -45,7 +46,7 @@ public class UserService implements UserDetailsManager {
 
     public UserDTO getUserById(Long id) {
         var user = userRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
         return userMapper.map(user);
     }
 
@@ -60,8 +61,8 @@ public class UserService implements UserDetailsManager {
     }
 
     public void deleteUser(Long id) {
-        userRepository.findById(id)
-                .orElseThrow();
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
         userRepository.deleteById(id);
     }
 

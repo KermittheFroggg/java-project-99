@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,9 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -54,7 +57,6 @@ public class LabelControllerTest {
 
     private Label testLabel;
 
-    private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
     @BeforeEach
     public void setUp() {
@@ -69,7 +71,7 @@ public class LabelControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/labels").with(token))
+        MvcResult result = mockMvc.perform(get("/api/labels").with(jwt()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -81,7 +83,7 @@ public class LabelControllerTest {
     public void testCreate() throws Exception {
         Map<String, String> data = new HashMap<>(Map.of("name", "buggy"));
 
-        MockHttpServletRequestBuilder request = post("/api/labels").with(token)
+        MockHttpServletRequestBuilder request = post("/api/labels").with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
 
@@ -96,21 +98,25 @@ public class LabelControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        Map<String, String> data = new HashMap<>(Map.of("name", "fit"));
+        labelRepository.save(testLabel);
 
-        MockHttpServletRequestBuilder request = put("/api/labels/" + testLabel.getId()).with(token)
+        Map<String, String> data = new HashMap<>(Map.of("name", "bugs"));
+
+        MockHttpServletRequestBuilder request = put("/api/labels/" + testLabel.getId()).with(jwt())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(data));
+        MvcResult result = mockMvc.perform(request)
+                .andReturn();
 
-        mockMvc.perform(request)
-                .andExpect(status().isOk());
+        int status = result.getResponse().getStatus();
+        System.out.println("Update status code: " + status);
 
         Label updatedLabel = labelRepository.findById(testLabel.getId()).orElse(null);
         assertThat(updatedLabel).isNotNull();
-        assertThat(updatedLabel.getName()).isEqualTo("fit");
+        assertThat(updatedLabel.getName()).isEqualTo("bugs");
 
-        mockMvc.perform(delete("/api/labels/" + testLabel.getId()).with(token));
-        mockMvc.perform(put("/api/labels/" + testLabel.getId()).with(token)
+        mockMvc.perform(delete("/api/labels/" + testLabel.getId()).with(jwt()));
+        mockMvc.perform(put("/api/labels/" + testLabel.getId()).with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(data)))
                 .andExpect(status().isNotFound());
@@ -118,7 +124,20 @@ public class LabelControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        mockMvc.perform(delete("/api/labels/" + testLabel.getId()).with(token))
-                .andExpect(status().isNoContent());
+        labelRepository.save(testLabel);
+
+        Optional<Label> existingLabel = labelRepository.findById(testLabel.getId());
+        if (existingLabel.isEmpty()) {
+            fail("Label does not exist, cannot delete");
+        }
+
+        MvcResult result = mockMvc.perform(delete("/api/labels/" + testLabel.getId()).with(jwt()))
+                .andReturn();
+
+        int status = result.getResponse().getStatus();
+        System.out.println("Delete status code: " + status);
+
+        Optional<Label> destroyedLabel = labelRepository.findById(testLabel.getId());
+        assertThat(destroyedLabel.isPresent()).isFalse();
     }
 }

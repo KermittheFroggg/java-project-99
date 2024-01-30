@@ -1,6 +1,7 @@
 package hexlet.code.controller;
 
 import hexlet.code.dto.user.UserUpdateDTO;
+import hexlet.code.exception.UserNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +50,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public UserDTO show(@PathVariable long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDTO> show(@PathVariable long id) {
+        try {
+            return ResponseEntity.ok(userService.getUserById(id));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping(path = "")
@@ -66,7 +71,12 @@ public class UserController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> delete(@PathVariable long id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
