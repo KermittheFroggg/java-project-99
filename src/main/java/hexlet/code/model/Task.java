@@ -5,11 +5,10 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -43,13 +42,13 @@ public class Task {
     @JoinColumn(name = "task_status_id")
     private TaskStatus taskStatus;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "assignee_id")
     private User assignee;
 
     private LocalDate createdAt;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<Label> labels;
 
 }

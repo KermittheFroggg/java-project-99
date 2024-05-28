@@ -4,6 +4,7 @@ import hexlet.code.mapper.UserMapper;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.util.ModelGenerator;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -71,6 +72,11 @@ class UsersControllerTest {
     @BeforeEach
     public void setUp() {
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        userRepository.delete(testUser);
     }
 
     @Test
