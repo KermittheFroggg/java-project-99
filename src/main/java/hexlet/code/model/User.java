@@ -49,9 +49,11 @@ public class User implements BaseEntity, UserDetails {
     private String passwordDigest;
 
     @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
 
     @LastModifiedDate
+    @Column(nullable = false)
     private LocalDate updatedAt;
 
     @Override
@@ -71,7 +73,7 @@ public class User implements BaseEntity, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<GrantedAuthority>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -88,5 +90,5 @@ public class User implements BaseEntity, UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
 }
+

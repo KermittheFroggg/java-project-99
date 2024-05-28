@@ -29,7 +29,6 @@ public class UserService implements UserDetailsManager {
     @Autowired
     private PasswordEncoder encoder;
 
-
     public List<UserDTO> getAllUsers() {
         var users = userRepository.findAll();
         return users.stream()
@@ -100,3 +99,4 @@ public class UserService implements UserDetailsManager {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
+
